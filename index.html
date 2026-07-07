@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Glow by Mahnoor | Premium Cosmetics & Perfumes</title>
+    <!-- Fonts & FontAwesome Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..700;1,400..700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Top Offers Announcement Banner -->
+    <div class="promo-banner">
+        <span>🎉 Mega Flash Sale! Use Code: <strong>GLOW26</strong> for 10% Off + Free Shipping Nationwide! 🎁</span>
+    </div>
+
+    <!-- 1. STICKY NAVBAR -->
+    <header class="navbar">
+        <div class="logo">Glow by Mahnoor</div>
+        
+        <!-- Live Search Bar -->
+        <div class="search-container">
+            <input type="text" id="search-input" placeholder="Search makeup, perfumes, skincare..." onkeyup="searchProducts()">
+            <i class="fas fa-search search-icon"></i>
+        </div>
+
+        <nav>
+            <ul class="nav-links">
+                <li><a href="#" class="active">Home</a></li>
+                <li><a href="#products-section">Shop</a></li>
+                <li><a href="#offers">Offers</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+
+        <div class="nav-actions">
+            <div class="nav-icon" onclick="toggleWishlistModal()"><i class="far fa-heart"></i><span id="wishlist-count">0</span></div>
+            <div class="nav-icon" onclick="toggleCartSidebar()"><i class="fas fa-shopping-bag"></i><span id="cart-count">0</span></div>
+            <div class="nav-icon" onclick="alert('User Dashboard coming soon!')"><i class="far fa-user"></i></div>
+        </div>
+    </header>
+
+    <!-- 2. HERO BANNER -->
+    <section class="hero">
+        <div class="hero-content">
+            <span class="hero-tag">Luxury Cosmetics & Fragrances</span>
+            <h1>Define Your <br>True Elegance</h1>
+            <p>Explore our premium range of organic skincare, high-glam makeup, and signature luxury perfumes curated specially for you.</p>
+            <a href="#products-section" class="btn-primary">Explore Shop <i class="fas fa-arrow-right"></i></a>
+        </div>
+    </section>
+
+    <!-- 3. SEARCH, FILTER & SORT CONTROLS -->
+    <section class="controls-section">
+        <div class="filter-wrapper">
+            <!-- Category Filter -->
+            <select id="category-filter" onchange="filterProducts()">
+                <option value="all">All Departments</option>
+                <option value="makeup">Makeup Essentials</option>
+                <option value="skin">Advanced Skincare</option>
+                <option value="perfume">Luxury Perfumes</option>
+            </select>
+
+            <!-- Price Filter -->
+            <select id="price-filter" onchange="filterProducts()">
+                <option value="all">All Prices</option>
+                <option value="under2000">Under Rs. 2,000</option>
+                <option value="above2000">Rs. 2,000 & Above</option>
+            </select>
+
+            <!-- Sorting -->
+            <select id="sort-filter" onchange="sortProducts()">
+                <option value="default">Sort By: Default</option>
+                <option value="low-high">Price: Low to High</option>
+                <option value="high-low">Price: High to Low</option>
+            </select>
+        </div>
+    </section>
+
+    <!-- 4. PRODUCTS SECTION -->
+    <section id="products-section" class="products-section">
+        <div class="section-title">
+            <h2>Our Premium 20 Best Sellers</h2>
+            <p>Indulge in high-end beauty formulations and enchanting premium scents.</p>
+        </div>
+
+        <div class="product-grid" id="product-grid">
+            <!-- 20 Products will load dynamically here via JS -->
+        </div>
+    </section>
+
+    <!-- 5. SHOPPING CART SIDEBAR -->
+    <div id="cart-sidebar" class="cart-sidebar">
+        <div class="cart-header">
+            <h3>Your Basket 🛍️</h3>
+            <span class="close-btn" onclick="toggleCartSidebar()">&times;</span>
+        </div>
+        <div id="cart-items-container" class="cart-items-container">
+            <!-- Basket items load dynamically -->
+        </div>
+        <div class="cart-footer">
+            <div class="coupon-box">
+                <input type="text" id="coupon-input" placeholder="Enter Coupon (GLOW26)">
+                <button onclick="applyCoupon()">Apply</button>
+            </div>
+            <div class="price-row"><span>Subtotal:</span><span id="subtotal-amount">Rs. 0</span></div>
+            <div class="price-row"><span>Discount (10%):</span><span id="discount-amount">Rs. 0</span></div>
+            <div class="price-row total"><span>Total Billing:</span><span id="total-amount">Rs. 0</span></div>
+            <button class="btn-checkout" onclick="openCheckoutModal()">Proceed to Checkout</button>
+        </div>
+    </div>
+
+    <!-- 6. WISHLIST MODAL -->
+    <div id="wishlist-modal" class="modal">
+        <div class="modal-content wishlist-content">
+            <div class="modal-header">
+                <h3>My Wishlist ❤️</h3>
+                <span class="close-btn" onclick="toggleWishlistModal()">&times;</span>
+            </div>
+            <div id="wishlist-container" class="wishlist-container"></div>
+        </div>
+    </div>
+
+    <!-- 7. PRODUCT QUICK VIEW MODAL (WITH ZOOM) -->
+    <div id="quickview-modal" class="modal">
+        <div class="modal-content quickview-content">
+            <span class="close-btn" onclick="closeQuickView()">&times;</span>
+            <div class="quickview-grid">
+                <div class="qv-images">
+                    <div class="zoom-container" id="zoom-container" onmousemove="zoomImage(event)" onmouseleave="resetZoom()">
+                        <img id="qv-main-img" src="" alt="Main View">
+                    </div>
+                    <div class="qv-thumbnails" id="qv-thumbnails"></div>
+                </div>
+                <div class="qv-details">
+                    <h2 id="qv-name">Product Title</h2>
+                    <div class="qv-rating" id="qv-rating">⭐⭐⭐⭐⭐</div>
+                    <div class="price-box">
+                        <span id="qv-price" class="main-price"></span>
+                        <span id="qv-discount" class="discount-price"></span>
+                    </div>
+                    <p id="qv-stock" class="stock-status"></p>
+                    
+                    <div class="tab-container">
+                        <div class="tabs">
+                            <button class="tab-btn active" onclick="switchTab(event, 'tab-ingredients')">Ingredients</button>
+                            <button class="tab-btn" onclick="switchTab(event, 'tab-benefits')">Benefits</button>
+                            <button class="tab-btn" onclick="switchTab(event, 'tab-usage')">How to Use</button>
+                        </div>
+                        <div id="tab-ingredients" class="tab-content active-content"></div>
+                        <div id="tab-benefits" class="tab-content"></div>
+                        <div id="tab-usage" class="tab-content"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 8. CHECKOUT MODAL -->
+    <div id="checkout-modal" class="modal">
+        <div class="modal-content checkout-content">
+            <div class="modal-header">
+                <h3>Secure Checkout 💳</h3>
+                <span class="close-btn" onclick="closeCheckoutModal()">&times;</span>
+            </div>
+            <div class="checkout-grid">
+                <form id="checkout-form" onsubmit="processOrder(event)">
+                    <h4>Shipping Details</h4>
+                    <input type="text" placeholder="Full Name" required>
+                    <input type="email" placeholder="Email Address" required>
+                    <input type="tel" placeholder="Phone Number" required>
+                    <textarea placeholder="Complete Delivery Address" rows="3" required></textarea>
+                    
+                    <h4>Payment Mode</h4>
+                    <div class="payment-methods">
+                        <label><input type="radio" name="payment" value="cod" checked> Cash on Delivery (COD)</label>
+                        <label><input type="radio" name="payment" value="card"> Credit/Debit Card</label>
+                    </div>
+                    <button type="submit" class="btn-order">Confirm Order</button>
+                </form>
+                <div class="order-summary-box">
+                    <h4>Order Summary</h4>
+                    <div id="checkout-summary-items"></div>
+                    <hr style="margin: 10px 0; border: 0; border-top: 1px solid #eee;">
+                    <div class="summary-total" id="checkout-summary-total">Total: Rs. 0</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 9. OFFERS BANNER -->
+    <section id="offers" class="offers-section">
+        <div class="discount-banner-card">
+            <h2>Glow Luxury Bundles Sale</h2>
+            <p>Flat 30% off on complete makeup gift sets. Premium packaging included.</p>
+        </div>
+    </section>
+
+    <!-- 10. CONTACT SECTION -->
+    <section id="contact" class="contact-section">
+        <div class="contact-grid">
+            <div>
+                <h3>Connect With Us</h3>
+                <p><i class="fas fa-envelope"></i> support@glowbymahnoor.com</p>
+                <p><i class="fas fa-phone"></i> +92 316 4623656</p>
+                <p><i class="fas fa-map-marker-alt"></i> Bahawalpur, Punjab, Pakistan</p>
+                
+                <div class="newsletter">
+                    <h4>Join the Glow Club</h4>
+                    <input type="email" placeholder="Enter your email">
+                    <button onclick="alert('Subscribed successfully!')">Join</button>
+                </div>
+            </div>
+            <form class="contact-form" onsubmit="event.preventDefault(); alert('Message sent successfully!');">
+                <input type="text" placeholder="Your Name" required>
+                <input type="email" placeholder="Your Email" required>
+                <textarea placeholder="Your Message" rows="4" required></textarea>
+                <button type="submit" class="btn-primary">Send Message</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-links">
+            <a href="#">About Us</a> | <a href="#">Privacy Policy</a> | <a href="#">Terms & Conditions</a> | <a href="#">Return Policy</a>
+        </div>
+        <div class="social-icons">
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="#"><i class="fab fa-tiktok"></i></a>
+        </div>
+        <p>&copy; 2026 Glow by Mahnoor. All Rights Reserved. Contact: 03164623656</p>
+    </footer>
+
+    <!-- Back to Top & WhatsApp Widgets -->
+    <button id="backToTop" onclick="scrollToTop()"><i class="fas fa-arrow-up"></i></button>
+    <a href="https://wa.me/923164623656" class="whatsapp-float" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <!-- JavaScript Connection -->
+    <script src="script.js"></script>
+</body>
+</html>
